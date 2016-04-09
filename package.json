@@ -1,0 +1,19 @@
+{
+  "name": "handsal",
+  "version": "0.1.0",
+  "description": "device pairing and comm",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/chrisfgill/handsal"
+  },
+  "keywords": [
+    "device",
+    "pairing"
+  ],
+  "author": "Chris Gill",
+  "license": "MIT"
+}
