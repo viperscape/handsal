@@ -28,8 +28,21 @@ function handle(socket, pin) {
     /// on recv of pin, append to pin in data store
     socket.on('pin', function (data) {
         var idx = store.append(data.pin, socket) - 1;
-        store.store[data.pin].forEach(function (el) {
-            el.emit('bc', { data: 0 });
-        });
+        if (!idx) {
+            socket.emit('err', { pin: 'no pin' });
+        }
+        else {
+            broadcast(pin, { data: 0 }, store);
+            console.log(store.store[pin].length);
+        }
+    });
+    socket.on('disconnect', function () {
+        console.log('disconnect');
+        broadcast(pin, { dead: true }, store);
+    });
+}
+function broadcast(pin, data, store) {
+    store.store[pin].forEach(function (el) {
+        el.emit('bc', data);
     });
 }

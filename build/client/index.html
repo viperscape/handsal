@@ -10,9 +10,6 @@
   socket.on('pin', function (data) {
         console.log(data);
         pin = data.pin;
-        
-        socket.emit('data', { thing: 1 });
-        socket.emit('pin', { pin: pin });
   });
     
   socket.on('disconnect', function () {
@@ -21,5 +18,52 @@
    
   socket.on('bc', function (data) {
         console.log(data);
+        if (data.conn) {
+            document.getElementById('connector').style.display = 'none';
+            document.getElementById('connect!').style.visibility = '';   
+        }
   });
+  
+  socket.on('err', function (e) {
+        console.log('err: ',e);
+        if (e.pin) {
+            console.log('pin error')
+        }
+  });
+  
+  function connect_show () {
+      document.getElementById('connect?').style.display = 'none';
+      document.getElementById('connector').style.visibility = '';
+  }
+  
+  function connect_begin (inp) {
+      if (!inp) {
+            console.log('begin!');
+            socket.emit('pin', { pin: pin });
+      }
+      else {
+          var p = document.getElementById(inp).value;
+          var p = parseInt(p);
+          if (typeof p === 'number') {
+            console.log('begin!');
+            socket.emit('pin', { pin: p });
+          }
+      }
+  }
 </script>
+
+<div id='connect?'>
+    <a href="#connect_show" onclick="connect_show()">connect?</a>
+</div>
+
+<div id='connector' style='visibility:hidden'>
+    <input id='pin' type='text'/>
+    <br>
+    <a href="#connect" onclick="connect_begin('pin')">connect</a>
+    <br>
+    <a href="#connect" onclick="connect_begin(null)">connect loopback</a>
+</div>
+
+<div id='connect!' style='visibility:hidden'>
+    <p>connected!</p>
+</div>

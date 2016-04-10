@@ -21,6 +21,9 @@ export class Store {
         if (!this.store[pin]) { 
             console.log('no pin');
         }
+        else if (this.store[pin].length > 1) {
+            console.log('max conn');
+        }
         else {
             return this.store[pin].push(socket)
         }

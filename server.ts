@@ -9,7 +9,7 @@ var ws = require('socket.io')(server);
 import storage = require('./store');
 
 var events;
-var store;
+var store: storage.Store;
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/client/index.html');
@@ -40,8 +40,23 @@ function handle (socket, pin: number) {
     socket.on('pin', function (data) {
         let idx = store.append(data.pin, socket) - 1;
         
-        store.store[data.pin].forEach(el => {
-            el.emit('bc', {data:0})
-        });
+        if (!idx) {
+            socket.emit('err',{pin:'no pin'})
+        }
+        else {
+            broadcast(pin,{data:0},store)
+            console.log(store.store[pin].length)
+        }
+    });
+    
+    socket.on('disconnect', function () {
+        console.log('disconnect');
+        broadcast(pin,{dead:true},store);
+    });
+}
+
+function broadcast (pin: number, data, store: storage.Store) {
+    store.store[pin].forEach(el => {
+        el.emit('bc', data);
     });
 }
