@@ -18,4 +18,8 @@
   socket.on('disconnect', function () {
         console.log('disconnected');
   });
+   
+  socket.on('bc', function (data) {
+        console.log(data);
+  });
 </script>

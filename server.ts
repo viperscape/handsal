@@ -23,9 +23,9 @@ export function run (port: number, ev, st) {
     return app
 }
 
+/// on connection send a random new pin for use
 ws.on('connection', function (socket) {
     let pin = store.insert(socket);
-    console.log(store.store[pin].length);
     
     socket.emit('pin', { pin: pin });
     handle(socket, pin);
@@ -36,9 +36,12 @@ function handle (socket, pin: number) {
         //console.log(data);
     });
     
+    /// on recv of pin, append to pin in data store
     socket.on('pin', function (data) {
-        console.log('pin:' + data.pin);
-        let idx = store.append(data.pin);
-        console.log(store.store[data.pin].length, idx);
+        let idx = store.append(data.pin, socket) - 1;
+        
+        store.store[data.pin].forEach(el => {
+            el.emit('bc', {data:0})
+        });
     });
 }

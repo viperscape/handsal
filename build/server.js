@@ -15,9 +15,9 @@ function run(port, ev, st) {
     return app;
 }
 exports.run = run;
+/// on connection send a random new pin for use
 ws.on('connection', function (socket) {
     var pin = store.insert(socket);
-    console.log(store.store[pin].length);
     socket.emit('pin', { pin: pin });
     handle(socket, pin);
 });
@@ -25,9 +25,11 @@ function handle(socket, pin) {
     socket.on('data', function (data) {
         //console.log(data);
     });
+    /// on recv of pin, append to pin in data store
     socket.on('pin', function (data) {
-        console.log('pin:' + data.pin);
-        var idx = store.append(data.pin);
-        console.log(store.store[data.pin].length, idx);
+        var idx = store.append(data.pin, socket) - 1;
+        store.store[data.pin].forEach(function (el) {
+            el.emit('bc', { data: 0 });
+        });
     });
 }
