@@ -2,8 +2,9 @@
   "name": "handsal",
   "version": "0.1.0",
   "description": "device pairing and comm",
-  "main": "main.js",
+  "main": "js/main.js",
   "scripts": {
+    "start": "js/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,11 @@
   "author": "Chris Gill <chrisfgill@gmail.com>",
   "license": "MIT",
   "dependencies": {
-      "express": "4.13.4"
+    "express": "4.13.4",
+    "socket.io":"1.4.5",
+    "uuid":"2.0.1"
+     },
+  "devDependencies": {
+    "typings": "^0.7.12"
   }
 }
