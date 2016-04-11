@@ -3,6 +3,7 @@ var Store = (function () {
     function Store() {
         this.store = {};
     }
+    /// returns random pin on new insert
     Store.prototype.insert = function (socket) {
         var tries = 0;
         while (tries < 1e4) {
@@ -13,21 +14,39 @@ var Store = (function () {
             }
             else {
                 tries++;
-                console.log('dupe pin');
+                console.log('dupe pin:', r);
             }
         }
     };
     /// returns index of other stream socket
     Store.prototype.append = function (pin, socket) {
         if (!this.store[pin]) {
-            console.log('no pin');
-        }
-        else if (this.store[pin].length > 1) {
-            console.log('max conn');
+            console.log('no pin:', pin);
         }
         else {
-            return this.store[pin].push(socket);
+            var r = this.update(pin, socket);
+            if (!r) {
+                if (this.store[pin].length < 2) {
+                    return this.store[pin].push(socket) - 1;
+                }
+                else {
+                    console.log('max conn:', pin);
+                }
+            }
+            else {
+                return r;
+            }
         }
+    };
+    Store.prototype.update = function (pin, socket) {
+        var num = 0;
+        this.store[pin].forEach(function (el) {
+            if (el.id == socket.id) {
+                el = socket;
+                return num;
+            }
+            num++;
+        });
     };
     Store.prototype.has = function (pin) {
         if (this.store[pin]) {

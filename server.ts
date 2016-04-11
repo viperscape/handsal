@@ -38,14 +38,13 @@ function handle (socket, pin: number) {
     
     /// on recv of pin, append to pin in data store
     socket.on('pin', function (data) {
-        let idx = store.append(data.pin, socket) - 1;
+        let idx = store.append(data.pin, socket);
         
         if (!idx) {
             socket.emit('err',{pin:'no pin'})
         }
         else {
-            broadcast(pin,{data:0},store)
-            console.log(store.store[pin].length)
+            broadcast(data.pin,{data:0},store)
         }
     });
     
