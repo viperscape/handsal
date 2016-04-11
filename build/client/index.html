@@ -2,10 +2,12 @@
 <script>
   var socket = io.connect('http://localhost:6063');
   var pin;
+  var connected = false;
   
   socket.on('connect', function () {
         console.log('connected');
         document.getElementById('ico-conn').style.visibility = '';
+        connected = true;
   });
   
   socket.on('pin', function (data) {
@@ -22,6 +24,9 @@
         console.log('disconnected');
         document.getElementById('ico-good').style.visibility = 'hidden';
         document.getElementById('ico-conn').style.visibility = 'hidden';
+        document.getElementById('input').style.visibility = 'hidden';
+        document.getElementById('data').style.visibility = 'hidden';
+        connected = false;
   });
    
   socket.on('bc', function (data) {
@@ -30,6 +35,8 @@
             document.getElementById('connector').style.display = 'none';
             document.getElementById('connect?').style.display = 'none';
             document.getElementById('ico-good').style.visibility = '';
+            
+            document.getElementById('input').style.visibility = '';
         }
   });
   
@@ -40,10 +47,28 @@
         }
   });
   
+  var data_list = [];
+  socket.on('data', function (data) {
+        console.log('data: ',data);
+        
+        if (data.text) {
+            data_list.pop();
+            data_list.unshift(data.text);
+            
+            document.getElementById('data').style.visibility = '';
+            
+            var list = document.getElementById('data_list');
+            data_list.forEach(function (el) {
+                list.childNodes[i].innerHTML = el;
+            });
+        }
+        else { console.log('unsupported data') }
+  });
+  
   function connect_show () {
       document.getElementById('connect?').style.display = 'none';
       document.getElementById('connector').style.visibility = '';
-      document.getElementById('pin').value = '';
+      document.getElementById('pin_connect').value = '';
   }
   
   function connect_begin (inp) {
@@ -60,12 +85,24 @@
           }
       }
   }
+  
+  function send_data (inp) {
+      if (!connected) { console.log('not connected'); return }
+      
+      var data = document.getElementById(inp).value;
+      socket.emit('data', {text:data});
+      
+      document.getElementById(inp).value = '';
+      document.getElementById('input_send').style.visibility = 'hidden';
+      
+      console.log('sent',data)
+  }
 </script>
 
 <div>
     <span id='ico-good' style="font-family:Wingdings;visibility:hidden">&#x270c;</span>
     <span id='ico-conn' style="font-family:Wingdings;visibility:hidden">&#x27b0;</span> 
-    <span id='ico-info' style="font-family:Wingdings" title="source">
+    <span id='ico-info' style="font-family:Wingdings" title="source (currently private)">
         <a href="https://gitlab.com/chrisfgill/handsal/" target="blank">&#x1F419;</a>
     </span>
 </div>
@@ -77,9 +114,27 @@
 </div>
 
 <div id='connector' style='visibility:hidden'>
-    <input id='pin' type='text'/>
+    <input id='pin_connect' type='text'/>
     <br>
-    <a href="#connect" onclick="connect_begin('pin')">connect</a>
+    <a href="#connect" onclick="connect_begin('pin_connect')">connect</a>
     <br>
     <a href="#connect" onclick="connect_begin(null)">connect loopback</a>
+</div>
+
+<div id='input' style='visibility:hidden'>
+    <textarea id='input_text' 
+        oninput="document.getElementById('input_send').style.visibility = '';"></textarea>
+    <br>
+    <a id='input_send' style='visibility:hidden' 
+        href="#" onclick="send_data('input_text')">send</a>
+</div>
+
+<div id='data' style='visibility:hidden'>
+    <l id='data_list'>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </l>
 </div>
