@@ -44,7 +44,7 @@ function handle (socket, pin: number) {
             socket.emit('err',{pin:'no pin'})
         }
         else {
-            broadcast(data.pin,{data:0},store)
+            broadcast(data.pin,{conn:true},store)
         }
     });
     

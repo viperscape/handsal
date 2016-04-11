@@ -32,7 +32,7 @@ function handle(socket, pin) {
             socket.emit('err', { pin: 'no pin' });
         }
         else {
-            broadcast(data.pin, { data: 0 }, store);
+            broadcast(data.pin, { conn: true }, store);
         }
     });
     socket.on('disconnect', function () {

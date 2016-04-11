@@ -5,22 +5,27 @@
   
   socket.on('connect', function () {
         console.log('connected');
+        document.getElementById('ico-conn').style.visibility = '';
   });
   
   socket.on('pin', function (data) {
         console.log(data);
         pin = data.pin;
+        document.getElementById('pin_display').textContent = pin;
   });
     
   socket.on('disconnect', function () {
         console.log('disconnected');
+        document.getElementById('ico-good').style.visibility = 'hidden';
+        document.getElementById('ico-conn').style.visibility = 'hidden';
   });
    
   socket.on('bc', function (data) {
         console.log(data);
         if (data.conn) {
             document.getElementById('connector').style.display = 'none';
-            document.getElementById('connect!').style.visibility = '';   
+            document.getElementById('connect?').style.display = 'none';
+            document.getElementById('ico-good').style.visibility = '';
         }
   });
   
@@ -34,6 +39,7 @@
   function connect_show () {
       document.getElementById('connect?').style.display = 'none';
       document.getElementById('connector').style.visibility = '';
+      document.getElementById('pin').value = '';
   }
   
   function connect_begin (inp) {
@@ -52,6 +58,16 @@
   }
 </script>
 
+<div>
+    <span id='ico-good' style="font-family:Wingdings;visibility:hidden">&#x270c;</span>
+    <span id='ico-conn' style="font-family:Wingdings;visibility:hidden">&#x27b0;</span> 
+    <span id='ico-info' style="font-family:Wingdings" title="source">
+        <a href="https://gitlab.com/chrisfgill/handsal/" target="blank">&#x1F419;</a>
+    </span>
+</div>
+
+<div><span id='pin_display'></span></div>
+
 <div id='connect?'>
     <a href="#connect_show" onclick="connect_show()">connect?</a>
 </div>
@@ -62,8 +78,4 @@
     <a href="#connect" onclick="connect_begin('pin')">connect</a>
     <br>
     <a href="#connect" onclick="connect_begin(null)">connect loopback</a>
-</div>
-
-<div id='connect!' style='visibility:hidden'>
-    <p>connected!</p>
 </div>
