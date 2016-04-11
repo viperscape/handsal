@@ -10,6 +10,10 @@
   
   socket.on('pin', function (data) {
         console.log(data);
+        if (pin) { // resetting our pin from server?
+            document.getElementById('connect?').style.display = '';
+        }
+        
         pin = data.pin;
         document.getElementById('pin_display').textContent = pin;
   });
