@@ -7,6 +7,7 @@
   socket.on('connect', function () {
         console.log('connected');
         document.getElementById('ico-conn').style.visibility = '';
+        document.getElementById('pin_display').style.visibility = '';
         connected = true;
   });
   
@@ -26,6 +27,8 @@
         document.getElementById('ico-conn').style.visibility = 'hidden';
         document.getElementById('input').style.visibility = 'hidden';
         document.getElementById('data').style.visibility = 'hidden';
+        document.getElementById('connector').style.display = 'none';
+        document.getElementById('pin_display').style.visibility = 'hidden';
         connected = false;
   });
    
@@ -37,6 +40,10 @@
             document.getElementById('ico-good').style.visibility = '';
             
             document.getElementById('input').style.visibility = '';
+            
+            // reshow pin now that we connected to elsewhere
+            document.getElementById('pin_display').textContent = pin;
+            document.getElementById('pin_display').style.visibility = '';
         }
   });
   
@@ -70,8 +77,10 @@
   
   function connect_show () {
       document.getElementById('connect?').style.display = 'none';
+      document.getElementById('connector').style.display = '';
       document.getElementById('connector').style.visibility = '';
       document.getElementById('pin_connect').value = '';
+      document.getElementById('pin_display').textContent = "enter other pin";
   }
   
   function connect_begin (inp) {
@@ -85,6 +94,7 @@
           if (typeof p === 'number') {
             console.log('begin!');
             socket.emit('pin', { pin: p });
+            pin = p;
           }
       }
   }
@@ -120,8 +130,6 @@
     <input id='pin_connect' type='text'/>
     <br>
     <a href="#connect" onclick="connect_begin('pin_connect')">connect</a>
-    <br>
-    <a href="#connect" onclick="connect_begin(null)">connect loopback</a>
 </div>
 
 <div id='input' style='visibility:hidden'>
