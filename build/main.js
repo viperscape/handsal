@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict";
 var server = require("./server");
 var storage = require('./store');

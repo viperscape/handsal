@@ -2,9 +2,9 @@
   "name": "handsal",
   "version": "0.1.0",
   "description": "device pairing and comm",
-  "main": "js/main.js",
+  "main": "./build/main.js",
   "scripts": {
-    "start": "js/main.js",
+    "start": "./build/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
