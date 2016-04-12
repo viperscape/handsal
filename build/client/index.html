@@ -1,3 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  
+  <style>
+      body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+      }
+  </style>
+  
+  <body>
+      
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost:6063');
@@ -67,7 +84,7 @@
             var list = document.getElementById('data_list');
             list.innerHTML = ''; 
             data_list.forEach(function (el) {
-                var n = document.createElement('l');
+                var n = document.createElement('li');
                 n.innerHTML = el;
                 list.appendChild(n);
             });
@@ -112,6 +129,8 @@
   }
 </script>
 
+<div class="container" align="center">
+
 <div>
     <span id='ico-good' style="font-family:Wingdings;visibility:hidden">&#x270c;</span>
     <span id='ico-conn' style="font-family:Wingdings;visibility:hidden">&#x27b0;</span> 
@@ -122,17 +141,17 @@
 
 <div><span id='pin_display'></span></div>
 
-<div id='connect?'>
+<div id='connect?' >
     <a href="#connect_show" onclick="connect_show()">connect?</a>
 </div>
 
-<div id='connector' style='visibility:hidden'>
+<div id='connector' style='visibility:hidden' >
     <input id='pin_connect' type='text'/>
     <br>
     <a href="#connect" onclick="connect_begin('pin_connect')">connect</a>
 </div>
 
-<div id='input' style='visibility:hidden'>
+<div id='input' style='visibility:hidden' >
     <textarea id='input_text' 
         oninput="document.getElementById('input_send').style.visibility = '';"></textarea>
     <br>
@@ -140,6 +159,14 @@
         href="#" onclick="send_data('input_text')">send</a>
 </div>
 
-<div id='data' style='visibility:hidden'>
-    <l id="data_list"></l>
+<div id='data' style='visibility:hidden' >
+    <ul id="data_list" class="list-unstyled"></ul>
 </div>
+
+</div>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+  </body>
+</html>
