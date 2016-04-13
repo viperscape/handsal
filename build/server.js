@@ -8,6 +8,7 @@ var store;
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
+app.use("/public", express.static(__dirname + '/client/public'));
 function run(port, ev, st) {
     server.listen(port);
     events = ev;
