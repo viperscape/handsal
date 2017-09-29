@@ -1,7 +1,7 @@
 "use strict";
-var express = require('express');
+var express = require("express");
 var app = express();
-var server = require('http').Server(app);
+var server = require("http").Server(app);
 var ws = require('socket.io')(server);
 var events;
 var store;
@@ -25,13 +25,10 @@ ws.on('connection', function (socket) {
 function handle(socket, pin) {
     var group_pin;
     socket.on('data', function (data) {
-        if (group_pin) {
-            console.log('data:', pin, group_pin, data);
-            send_others_data(pin, group_pin, data, store);
-        }
-        else {
-            console.log('non-routed data:', pin, data);
-        }
+        if (!group_pin)
+            group_pin = pin;
+        console.log('data:', pin, group_pin, data);
+        send_others_data(pin, group_pin, data, store);
     });
     /// on recv of pin, append to pin in data store
     socket.on('pin', function (data) {

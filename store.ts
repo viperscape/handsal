@@ -1,9 +1,5 @@
-"use strict";
-
-
 export class Store {
     store = {};
-    constructor () {}
     
     /// returns random pin on new insert
     insert (socket): number {
