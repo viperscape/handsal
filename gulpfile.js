@@ -23,6 +23,7 @@ gulp.task('browserify', ['typescript_client'], function () {
 
 gulp.task('typescript_server', function() {
     var tsProject = ts.createProject('tsconfig.json');
+    tsProject.config.exclude.push("client");
     var tsResult = tsProject.src()
 		.pipe(tsProject());
 	
@@ -31,6 +32,7 @@ gulp.task('typescript_server', function() {
 
 gulp.task('typescript_client', function() {
     var tsProject = ts.createProject('tsconfig.json');
+    tsProject.config.exclude.push("server");
     var tsResult = tsProject.src()
 		.pipe(tsProject());
 	
@@ -54,4 +56,4 @@ gulp.task('clean', function () {
         .pipe(clean());
 });
 
-gulp.task('build', ['browserify']);
+gulp.task('build', ['browserify','typescript_server','static-server','static-client']);
