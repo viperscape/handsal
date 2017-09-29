@@ -3,21 +3,22 @@
 exports.__esModule = true;
 var Client = /** @class */ (function () {
     function Client(io) {
+        var _this = this;
         this.connected = false;
         this.socket = io;
         this.socket.on('connect', function () {
             console.log('connected');
             document.getElementById('ico-conn').style.visibility = '';
             document.getElementById('pin_display').style.visibility = '';
-            this.connected = true;
+            _this.connected = true;
         });
         this.socket.on('pin', function (data) {
             console.log(data);
-            if (this.pin) {
+            if (_this.pin) {
                 document.getElementById('connect?').style.display = '';
             }
-            this.pin = data.pin;
-            document.getElementById('pin_display').textContent = this.pin;
+            _this.pin = data.pin;
+            document.getElementById('pin_display').textContent = _this.pin.toString();
         });
         this.socket.on('disconnect', function () {
             console.log('disconnected');
@@ -26,8 +27,8 @@ var Client = /** @class */ (function () {
             document.getElementById('input').style.visibility = 'hidden';
             document.getElementById('data').style.visibility = 'hidden';
             document.getElementById('connector').style.display = 'none';
-            document.getElementById('pin_display').style.visibility = 'hidden';
-            this.connected = false;
+            document.getElementById('directions').style.visibility = 'hidden';
+            _this.connected = false;
         });
         this.socket.on('bc', function (data) {
             console.log(data);
@@ -37,8 +38,7 @@ var Client = /** @class */ (function () {
                 document.getElementById('ico-good').style.visibility = '';
                 document.getElementById('input').style.visibility = '';
                 // reshow pin now that we connected to elsewhere
-                document.getElementById('pin_display').textContent = this.pin;
-                document.getElementById('pin_display').style.visibility = '';
+                document.getElementById('directions').textContent = _this.pin.toString();
             }
         });
         this.socket.on('err', function (e) {
@@ -73,8 +73,8 @@ var Client = /** @class */ (function () {
         document.getElementById('connect?').style.display = 'none';
         document.getElementById('connector').style.display = '';
         document.getElementById('connector').style.visibility = '';
-        document.getElementById('pin_connect').value = '';
-        document.getElementById('pin_display').textContent = "enter other pin";
+        document.getElementById("pin_connect").value = '';
+        document.getElementById('directions').textContent = "enter other pin";
     };
     Client.prototype.connect_begin = function (inp) {
         if (!inp) {
@@ -83,7 +83,7 @@ var Client = /** @class */ (function () {
         }
         else {
             var p = document.getElementById(inp).value;
-            var p = parseInt(p);
+            p = parseInt(p);
             if (typeof p === 'number') {
                 console.log('begin!');
                 this.socket.emit('pin', { pin: p });

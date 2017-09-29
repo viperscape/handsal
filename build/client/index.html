@@ -16,10 +16,7 @@
     <body>
         <script src="/socket.io/socket.io.js"></script>
         <script src="bundle.js"></script>
-        <script>
-            var conn = App(io()); 
-            console.log('conn',conn);
-        </script>
+        <script>var conn = App(io());</script>
 
         <div class="container" align="center">
 
@@ -31,13 +28,13 @@
             </span>
         </div>
 
-        <div>hand out <span id='pin_display'></span>  and wait</div>
+        <div id='directions'>hand out <span id='pin_display'></span> and wait</div>
 
-        <div id='connect?' >
+        <div id='connect?'>
             <a href="#connect_show" onclick="conn.connect_show()">or connect to other</a>
         </div>
 
-        <div id='connector' style='visibility:hidden' >
+        <div id='connector' style='visibility:hidden'>
             <input id='pin_connect' type='text'/>
             <br>
             <a href="#connect" onclick="conn.connect_begin('pin_connect')">connect</a>
@@ -52,7 +49,7 @@
         </div>
 
         <div id='data' style='visibility:hidden' >
-            <ul id="data_list" class="list-unstyled"></ul>
+            <ul id="data_list" style="list-style-type: none"></ul>
         </div>
 
         </div>

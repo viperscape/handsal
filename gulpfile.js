@@ -7,9 +7,9 @@ const browserify = require('browserify');
 
 gulp.task('default', ['build'], function() {
     gulp.watch('server/*.ts', ['typescript_server']);
-    gulp.watch('client/main.ts', ['browserify']);
-    gulp.watch('client/static/*', ['static-client']);
-    gulp.watch('server/static/*', ['static-server']);
+    gulp.watch('client/*.ts', ['browserify']);
+    gulp.watch('client/static/**/*.*', ['static-client']);
+    gulp.watch('server/static/**/*.*', ['static-server']);
 });
 
 /// bundle client modules
