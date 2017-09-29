@@ -7,9 +7,9 @@ var ws = require('socket.io')(server);
 var events;
 var store;
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/client/index.html');
+    res.sendFile(process.cwd() + "/build/client/index.html");
 });
-app.use("/public", express.static(__dirname + '/client/public'));
+app.use("/", express.static(process.cwd() + "/build/client/"));
 function run(port, ev, st) {
     server.listen(port);
     events = ev;

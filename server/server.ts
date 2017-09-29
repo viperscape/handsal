@@ -10,10 +10,10 @@ var events;
 var store: storage.Store;
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/client/index.html');
+    res.sendFile(process.cwd()+"/build/client/index.html");
 });
 
-app.use("/public", express.static(__dirname + '/client/public'));
+app.use("/", express.static(process.cwd()+"/build/client/"));
 
 export function run (port: number, ev, st) {
     server.listen(port);

@@ -1,172 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
   
-  <style>
-      body {
+    <style>
+        body {
             padding-top: 40px;
             padding-bottom: 40px;
-      }
-  </style>
-  
-  <body>
-      
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect();
-  var pin;
-  var connected = false;
-  
-  socket.on('connect', function () {
-        console.log('connected');
-        document.getElementById('ico-conn').style.visibility = '';
-        document.getElementById('pin_display').style.visibility = '';
-        connected = true;
-  });
-  
-  socket.on('pin', function (data) {
-        console.log(data);
-        if (pin) { // resetting our pin from server?
-            document.getElementById('connect?').style.display = '';
         }
-        
-        pin = data.pin;
-        document.getElementById('pin_display').textContent = pin;
-  });
-    
-  socket.on('disconnect', function () {
-        console.log('disconnected');
-        document.getElementById('ico-good').style.visibility = 'hidden';
-        document.getElementById('ico-conn').style.visibility = 'hidden';
-        document.getElementById('input').style.visibility = 'hidden';
-        document.getElementById('data').style.visibility = 'hidden';
-        document.getElementById('connector').style.display = 'none';
-        document.getElementById('pin_display').style.visibility = 'hidden';
-        connected = false;
-  });
-   
-  socket.on('bc', function (data) {
-        console.log(data);
-        if (data.conn) {
-            document.getElementById('connector').style.display = 'none';
-            document.getElementById('connect?').style.display = 'none';
-            document.getElementById('ico-good').style.visibility = '';
-            
-            document.getElementById('input').style.visibility = '';
-            
-            // reshow pin now that we connected to elsewhere
-            document.getElementById('pin_display').textContent = pin;
-            document.getElementById('pin_display').style.visibility = '';
-        }
-  });
+    </style>
   
-  socket.on('err', function (e) {
-        console.log('err: ',e);
-        if (e.pin) {
-            console.log('pin error')
-        }
-  });
-  
-  var data_list = [];
-  socket.on('data', function (data) {
-        console.log('data: ',data);
-        
-        if (data.text) {
-            if (data_list.length > 5) { data_list.pop(); }
-            data_list.unshift(data.text);
-            
-            document.getElementById('data').style.visibility = '';
-            
-            var list = document.getElementById('data_list');
-            list.innerHTML = ''; 
-            data_list.forEach(function (el) {
-                var n = document.createElement('li');
-                n.innerHTML = el;
-                list.appendChild(n);
-            });
-        }
-        else { console.log('unsupported data') }
-  });
-  
-  function connect_show () {
-      document.getElementById('connect?').style.display = 'none';
-      document.getElementById('connector').style.display = '';
-      document.getElementById('connector').style.visibility = '';
-      document.getElementById('pin_connect').value = '';
-      document.getElementById('pin_display').textContent = "enter other pin";
-  }
-  
-  function connect_begin (inp) {
-      if (!inp) {
-            console.log('begin!');
-            socket.emit('pin', { pin: pin });
-      }
-      else {
-          var p = document.getElementById(inp).value;
-          var p = parseInt(p);
-          if (typeof p === 'number') {
-            console.log('begin!');
-            socket.emit('pin', { pin: p });
-            pin = p;
-          }
-      }
-  }
-  
-  function send_data (inp) {
-      if (!connected) { console.log('not connected'); return }
-      
-      var data = document.getElementById(inp).value;
-      socket.emit('data', {text:data});
-      
-      document.getElementById(inp).value = '';
-      document.getElementById('input_send').style.visibility = 'hidden';
-      
-      console.log('sent',data)
-  }
-</script>
+    <body>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="bundle.js"></script>
+        <script>
+            var conn = App(io()); 
+            console.log('conn',conn);
+        </script>
 
-<div class="container" align="center">
+        <div class="container" align="center">
 
-<div>
-    <span id='ico-good' style="font-family:Wingdings;visibility:hidden">&#x270c;</span>
-    <span id='ico-conn' style="font-family:Wingdings;visibility:hidden">&#x27b0;</span> 
-    <span id='ico-info' style="font-family:Wingdings" title="source (currently private)">
-        <a href="https://gitlab.com/chrisfgill/handsal/" target="blank">&#x1F419;</a>
-    </span>
-</div>
+        <div>
+            <span id='ico-good' style="font-family:Wingdings;visibility:hidden">&#x270c;</span>
+            <span id='ico-conn' style="font-family:Wingdings;visibility:hidden">&#x27b0;</span> 
+            <span id='ico-info' style="font-family:Wingdings" title="source (currently private)">
+                <a href="https://gitlab.com/chrisfgill/handsal/" target="blank">&#x1F419;</a>
+            </span>
+        </div>
 
-<div>hand out <span id='pin_display'></span>  and wait</div>
+        <div>hand out <span id='pin_display'></span>  and wait</div>
 
-<div id='connect?' >
-    <a href="#connect_show" onclick="connect_show()">or connect to other</a>
-</div>
+        <div id='connect?' >
+            <a href="#connect_show" onclick="conn.connect_show()">or connect to other</a>
+        </div>
 
-<div id='connector' style='visibility:hidden' >
-    <input id='pin_connect' type='text'/>
-    <br>
-    <a href="#connect" onclick="connect_begin('pin_connect')">connect</a>
-</div>
+        <div id='connector' style='visibility:hidden' >
+            <input id='pin_connect' type='text'/>
+            <br>
+            <a href="#connect" onclick="conn.connect_begin('pin_connect')">connect</a>
+        </div>
 
-<div id='input' style='visibility:hidden' >
-    <textarea id='input_text' 
-        oninput="document.getElementById('input_send').style.visibility = '';"></textarea>
-    <br>
-    <a id='input_send' style='visibility:hidden' 
-        href="#" onclick="send_data('input_text')">send</a>
-</div>
+        <div id='input' style='visibility:hidden' >
+            <textarea id='input_text' 
+                oninput="document.getElementById('input_send').style.visibility = '';"></textarea>
+            <br>
+            <a id='input_send' style='visibility:hidden' 
+                href="#" onclick="conn.send_data('input_text')">send</a>
+        </div>
 
-<div id='data' style='visibility:hidden' >
-    <ul id="data_list" class="list-unstyled"></ul>
-</div>
+        <div id='data' style='visibility:hidden' >
+            <ul id="data_list" class="list-unstyled"></ul>
+        </div>
 
-</div>
+        </div>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-  </body>
+    </body>
 </html>
