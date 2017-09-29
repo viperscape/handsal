@@ -96,9 +96,9 @@ export class Client {
             var p = document.getElementById(inp).value;
             var p = parseInt(p);
             if (typeof p === 'number') {
-            console.log('begin!');
-            this.socket.emit('pin', { pin: p });
-            this.pin = p;
+                console.log('begin!');
+                this.socket.emit('pin', { pin: p });
+                this.pin = p;
             }
         }
     }
