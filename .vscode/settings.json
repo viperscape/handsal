@@ -1,3 +1,6 @@
-// Place your settings in this file to overwrite default and user settings.
 {
+    "eslint.enable": false,
+    "files.exclude": {
+        "node_modules/": true
+    }
 }

@@ -1,0 +1,1 @@
+import WS = require ("./ws");
