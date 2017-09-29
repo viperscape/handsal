@@ -16,9 +16,8 @@
   <body>
       
 <script src="/socket.io/socket.io.js"></script>
-<script src="/public/server.js"></script>
 <script>
-  var socket = io.connect(get_server());
+  var socket = io.connect();
   var pin;
   var connected = false;
   

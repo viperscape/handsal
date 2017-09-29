@@ -4,10 +4,7 @@
   "description": "device pairing and comm",
   "main": "build/main.js",
   "scripts": {
-    "start": "node build/main.js",
-    "build:dev": "mustache server-dev-view.json server-template.js > build/client/public/server.js",
-    "build": "mustache server-pub-view.json server-template.js > build/client/public/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node build/main.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +26,6 @@
     "@types/express": "^4.0.37",
     "@types/node": "^8.0.31",
     "@types/socket.io": "^1.4.30",
-    "mustache": "^2.2.1",
     "typings": "^0.7.12"
   }
 }
